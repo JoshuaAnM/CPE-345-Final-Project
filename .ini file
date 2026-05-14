@@ -1,0 +1,50 @@
+[General]
+network = UFCStreamingSimulation
+sim-time-limit = 300s
+
+# source: viewers requesting UFC video chunks
+**.viewers.numJobs = 1000
+**.viewers.interArrivalTime = exponential(0.5s)
+
+# first queue: main network/server bottleneck
+**.mainServerQueue.capacity = 100
+**.mainServerQueue.serviceTime = exponential(0.4s)
+
+# router sends jobs to one of two server paths
+**.router.routingAlgorithm = "roundRobin"
+
+# two server alternatives after router
+**.normalServer.capacity = 100
+**.normalServer.serviceTime = exponential(0.5s)
+
+**.backupServer.capacity = 100
+**.backupServer.serviceTime = exponential(0.5s)
+
+
+[LowTraffic]
+**.viewers.numJobs = 500
+**.viewers.interArrivalTime = exponential(1.2s)
+
+
+[MediumTraffic]
+**.viewers.numJobs = 1000
+**.viewers.interArrivalTime = exponential(0.7s)
+
+
+[HighTraffic]
+**.viewers.numJobs = 1500
+**.viewers.interArrivalTime = exponential(0.4s)
+
+
+[OverloadedTraffic]
+**.viewers.numJobs = 2000
+**.viewers.interArrivalTime = exponential(0.25s)
+
+
+[ImprovedServer]
+**.viewers.numJobs = 2000
+**.viewers.interArrivalTime = exponential(0.25s)
+
+**.mainServerQueue.serviceTime = exponential(0.25s)
+**.normalServer.serviceTime = exponential(0.3s)
+**.backupServer.serviceTime = exponential(0.3s)
